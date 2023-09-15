@@ -1,6 +1,6 @@
 # QuecPython Module Linux System USB Driver Installation Guide
 
-[[中文](./README-zh.MD)]
+[[中文](./README-zh.md)]
 
 The QuecPython module's Linux system USB driver is provided in source code form and needs to be compiled by developers according to the Linux kernel version used.
 
