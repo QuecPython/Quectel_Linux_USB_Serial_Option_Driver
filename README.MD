@@ -1,14 +1,14 @@
-# QuecPython 模组 Linux 系统 USB 驱动安装说明
+# QuecPython Module Linux System USB Driver Installation Guide
 
+[[中文](./README-zh.MD)]
 
+The QuecPython module's Linux system USB driver is provided in source code form and needs to be compiled by developers according to the Linux kernel version used.
 
-QuecPython 模组 Linux 系统 USB 驱动以源码形式提供，需要开发者根据所用 Linux 系统内核版本，使用源码自行编译。
+Currently supported module models include: EC600U, EC200U, EC600N, EC800N, EC200A, EC800G, EC600M, EC800M, EC600E, EC800E
 
-目前支持的模组型号有：EC600U、EC200U、EC600N、EC800N、EC200A、EC800G、EC600M、EC800M、EC600E、EC800E
+## Environment Dependencies
 
-## 环境依赖
-
-该驱动安装流程依赖 git、make 与 gcc，执行以下命令进行安装：
+The driver installation process depends on `git`, `make`, and `gcc`. Install them by running the following commands:
 
 ```bash
 sudo apt update
@@ -16,29 +16,29 @@ sudo apt upgrade
 sudo apt install git make gcc
 ```
 
-## 源码下载
+## Source Code Download
 
 ```bash
 git clone https://github.com/QuecPython/Quectel_Linux_USB_Serial_Option_Driver.git
 ```
 
-## 编译安装
+## Compilation and Installation
 
-> 若安装过该驱动，则需先执行`rmmod option`移除已安装驱动。
+> If the driver has been installed before, you need to first run `rmmod option` to remove the previously installed driver.
 
-1. 驱动代码在 src 文件夹内，以内核版本号进行分类，开发者需要选择与所用系统的内核版本最接近的文件夹进行编译。
+1. The driver code is located in the src folder, categorized by the kernel version. Developers should choose the folder that is closest to the kernel version used in their system for compilation.
 
-    使用`uanme -r`命令查看系统的内核版本，执行结果如下：
+    Use the `uname -r` command to check the system's kernel version. The result of the command will look like this:
 
 ```bash
 carl@carl-OptiPlex-7050:~$ uname -r
 5.4.0-150-generic
 ```
 
-2. 找到与所用系统的内核版本最接近的文件夹，进入该目录：`cd src/v5.4.1`
-3. 执行`sudo make install`编译和安装驱动。
+2. Find the folder that is closest to your system's kernel version and navigate to that directory: `cd src/v5.4.1`
+3. Execute `sudo make install` to compile and install the driver.
 
->编译 EC200A 的驱动时，在执行完`make install`之后，需再执行如下两步：
+>If you are compiling the driver for EC200A, after running make install, you need to perform the following two steps:
 >
 >```bash
 >cd drivers/usb/serial
