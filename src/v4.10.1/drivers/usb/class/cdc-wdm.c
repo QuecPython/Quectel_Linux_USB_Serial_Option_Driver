@@ -10,6 +10,8 @@
  * Released under the GPLv2.
  *
  * Many thanks to Carl Nordbeck
+
+ * Based on version modification, the author is Quectel <fae-support@quectel.com>
  */
 #include <linux/kernel.h>
 #include <linux/errno.h>

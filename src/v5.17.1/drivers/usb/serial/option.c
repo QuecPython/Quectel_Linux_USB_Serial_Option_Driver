@@ -23,6 +23,8 @@
   Some of the "one port" devices actually exhibit multiple USB instances
   on the USB bus. This is not a bug, these ports are used for different
   device features.
+
+  Based on version modification, the author is Quectel <fae-support@quectel.com>
 */
 
 #define DRIVER_AUTHOR "Matthias Urlichs <smurf@smurf.noris.de>"
@@ -591,8 +593,11 @@ static const struct usb_device_id option_ids[] = {
 	{ USB_DEVICE(0x05C6, 0x9090) }, /* Quectel UC15 */
 	{ USB_DEVICE(0x05C6, 0x9003) }, /* Quectel UC20 */
 	{ USB_DEVICE(0x05C6, 0x9215) }, /* Quectel EC20(MDM9215) */
+    { USB_DEVICE(0x05C6, 0x9091) }, /* Quectel QCM6125 */
+	{ USB_DEVICE(0x05C6, 0x90DB) }, /* Quectel QCM6490 */
 	{ USB_DEVICE(0x2C7C, 0x0125) }, /* Quectel EC20(MDM9x07)/EC25/EG25 */
 	{ USB_DEVICE(0x2C7C, 0x0121) }, /* Quectel EC21 */
+    { USB_DEVICE(0x2C7C, 0x030E) }, /* Quectel EM05G */
 	{ USB_DEVICE(0x2C7C, 0x0191) }, /* Quectel EG91 */
 	{ USB_DEVICE(0x2C7C, 0x0195) }, /* Quectel EG95 */
 	{ USB_DEVICE(0x2C7C, 0x0306) }, /* Quectel EG06/EP06/EM06 */
@@ -608,9 +613,13 @@ static const struct usb_device_id option_ids[] = {
 	{ USB_DEVICE(0x2C7C, 0x0620) }, /* Quectel EG20 */
 	{ USB_DEVICE(0x2C7C, 0x0800) }, /* Quectel RG500/RM500/RG510/RM510 */
 	{ USB_DEVICE(0x2C7C, 0x0801) }, /* Quectel RG520/RM520/SG520 */
+    { USB_DEVICE(0x2C7C, 0x0122) }, /* Quectel RG650 SDX7X */
+    { USB_DEVICE(0x2C7C, 0x0316) }, /* Quectel RG255 SDX35 */
 	{ USB_DEVICE(0x2C7C, 0x6026) }, /* Quectel EC200 */
 	{ USB_DEVICE(0x2C7C, 0x6120) }, /* Quectel UC200 */
 	{ USB_DEVICE(0x2C7C, 0x6000) }, /* Quectel EC200/UC200 */
+	{ USB_DEVICE(0x3763, 0x3C93) }, /* Quectel GW */
+	{ USB_DEVICE(0x3C93, 0xFFFF) }, /* Quectel GW */
 	{ .match_flags = USB_DEVICE_ID_MATCH_VENDOR, .idVendor = 0x2C7C }, /* Match All Quectel Modules */
 #endif
 	{ USB_DEVICE(OPTION_VENDOR_ID, OPTION_PRODUCT_COLT) },
@@ -2240,6 +2249,12 @@ static int option_probe(struct usb_serial *serial,
 	if (serial->dev->descriptor.idVendor == cpu_to_le16(0x05C6) && serial->dev->descriptor.idProduct == cpu_to_le16(0x9215)
 		&& serial->interface->cur_altsetting->desc.bInterfaceNumber >= 4)
 		return -ENODEV;
+        
+    //Quectel QCM6125 & QCM6490's interface 2 can be used as USB Network device
+	if (serial->dev->descriptor.idVendor == cpu_to_le16(0x05C6) && 
+		(serial->dev->descriptor.idProduct == cpu_to_le16(0x9091) || serial->dev->descriptor.idProduct == cpu_to_le16(0x90DB))
+		&& serial->interface->cur_altsetting->desc.bInterfaceNumber >= 2)
+		return -ENODEV;
 
 	if (serial->dev->descriptor.idVendor == cpu_to_le16(0x2C7C)) {
 		__u16 idProduct = le16_to_cpu(serial->dev->descriptor.idProduct);
@@ -2252,6 +2267,9 @@ static int option_probe(struct usb_serial *serial,
 
 		if ((idProduct&0xF000) == 0x0000) {
 			//MDM interface 4 is QMI
+            if (idProduct == 0x0316 && intf->bInterfaceNumber == 3)   //SDX35
+				return -ENODEV;
+            
 			if (intf->bInterfaceNumber == 4 && intf->bNumEndpoints == 3
 				&& intf->bInterfaceSubClass == 0xFF && intf->bInterfaceProtocol == 0xFF)
 				return -ENODEV;

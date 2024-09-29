@@ -5,6 +5,8 @@
  *	Copyright (c) 2008 QUALCOMM Incorporated.
  *	Copyright (c) 2009 Greg Kroah-Hartman <gregkh@suse.de>
  *	Copyright (c) 2009 Novell Inc.
+
+ *      Based on version modification, the author is Quectel <fae-support@quectel.com>
  */
 
 #include <linux/tty.h>
