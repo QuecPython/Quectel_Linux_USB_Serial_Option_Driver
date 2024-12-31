@@ -28,7 +28,7 @@ git clone https://github.com/QuecPython/Quectel_Linux_USB_Serial_Option_Driver.g
 
 1. 驱动代码在 src 文件夹内，以内核版本号进行分类，开发者需要选择与所用系统的内核版本最接近的文件夹进行编译。
 
-    使用`uanme -r`命令查看系统的内核版本，执行结果如下：
+    使用`uname -r`命令查看系统的内核版本，执行结果如下：
 
 ```bash
 carl@carl-OptiPlex-7050:~$ uname -r
